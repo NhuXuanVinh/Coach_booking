@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Quản lý xe khách
+        </title>
+        <link rel="stylesheet" type="text/css" href=" {% static 'css/style.css' %} ">
+    </head>
+    <body>
+        <div class="login_body">
+            <div class="wrapper">
+                <h1>Login</h1>
+                <form action="{%url 'qlxk:login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input_box">
+                    <input type="text" name="username" id="username" placeholder="Username"  autocomplete="off" required>
+                    </div>
+                    <div class="input_box">
+                    <input type="password" name="password" id="password" placeholder="Password"  autocomplete="off" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <div class="signUp_link">
+                    <p>
+                    Dont't have an account? 
+                    <a href="{% url 'qlxk:signUp'%}">Sign Up</a>
+                    </p>
+                </div>
+            </div>
+            </div>
+    </body>
+</html>

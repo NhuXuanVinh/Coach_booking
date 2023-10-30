@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Seat Reservation Form</title>
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/style.css' %} ">
+	<style type="text/css">
+        .book_container {
+            
+            height:calc(100vh - 70px);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+        .details {
+            padding-left: 10px;
+            /* Adjust width as needed */
+            width: 50%;
+            font-size: 25px;
+        }
+        .seats_container {
+            font-size: 20px;
+            width: 100%;
+            display: grid;
+            justify-items: center;
+        }
+        
+        #seats {
+            display: grid;
+            gap: 10px;
+            font-weight: bold;
+        }
+		.seat {
+			background-color: #eee;
+			margin-top: 5px;
+            margin-right:10px;
+			cursor: pointer;
+			height: 40px;
+			width: 40px;
+			display: inline-block;
+			text-align: center;
+			line-height: 30px;
+			border-radius: 5px;
+		}
+		.seat.selected {
+			background-color: #16df16;
+		}
+		.seat.booked {
+			background-color: #ff0000;
+			pointer-events: none;
+		}
+		.seat.myBooked {
+            background-color: #529ff8;
+            pointer-events: none;
+        }
+        .book_button {
+            background-color: #4CAF50; /* Green background */
+            height: 60px;
+            border: none; /* Remove border */
+            color: white; /* White text */
+            padding: 15px 20px; /* Some padding */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block;
+            font-size: 16px;
+            margin: 30px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s; /* Transition effect */
+        }
+    
+        button:hover {
+            background-color: #45a049; /* Green background on hover */
+        }
+	</style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div>
+            <a href="{% url 'qlxk:index' %}"><i class="<icon>"></i> Main Page</a>
+        </div>
+        {% if user.is_authenticated %}
+        <div>
+            <a href="{% url 'qlxk:user_trips' %}">User Info</a>
+            <a href="{% url 'qlxk:logout' %}">Logout</a>
+        </div>
+        {% else %}
+            <div>
+                <a href="{% url 'qlxk:login' %}">Sign In</a>
+                <a href="{% url 'qlxk:Sign' %}">Sign Up</a>  
+            </div>
+            {% endif %}
+        </div>
+        
+    <div class="book_container">
+    <div class="details">
+        <h1>Chi tiết chuyến đi</h1>
+        <h3>Mã chuyến xe: {{chuyenxe.chuyenxe_id}}</h3>
+        <h3>Loại xe: {{chuyenxe.bien_so.xe_name}}</h3>
+        <h3>Từ: {{chuyenxe.origin}}</h3>
+        <h3>Đến: {{chuyenxe.destination}}</h3>
+        <h3>Ngày: {{chuyenxe.chuyenxe_date|date:"d/m/Y"}}</h3>
+        <h3>Thời gian đi: {{chuyenxe.start_time|date:"G:i"}}-{{chuyenxe.arrive_time|date:"G:i"}}</h3>
+    </div>
+	<div class="seats_container">
+        <h2>Please select your seats</h2>
+        <div id="seats">
+            <!-- Seats go here -->
+        </div>
+        <button class="book_button" onclick="getSelectedSeats()">Book!</button>
+    </div>
+    </div>
+	
+	
+	<script type="text/javascript">
+        var seats = []
+        var numCols = "{{ numCols }}";
+        var numRows = "{{ numRows }}";
+        var bookedSeats = JSON.parse('{{ bookedSeats|escapejs }}');
+		var myBookedSeats = JSON.parse('{{ myBookedSeats|escapejs }}');
+        window.onload = function() {
+            var seats = document.getElementById("seats");
+            seats.style.gridTemplateColumns = "repeat(" + numCols + ", 1fr)";
+        };
+		
+		for (var i = 0; i < numRows; i++) {
+            var row = [];
+            for (var j = 0; j < numCols; j++) {
+                row.push(i * numCols + j + 1);
+            }
+            seats.push(row);
+        }
+
+		var selectedSeats = [];
+
+		function getSelectedSeats() {
+            if (selectedSeats.length === 0) {
+                alert("Please select at least one seat.");
+                return;  // Stop here if no seats are selected
+            }
+            var url = "{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}"; // replace with your endpoint
+            var data = {selectedSeats: selectedSeats};
+        
+            fetch(url, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), 
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data.message);
+                if (data.message) {
+                    alert(data.message);
+                    window.location.reload(); 
+                }
+                
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        
+
+		function init() {
+            var str = "";
+            for (var i = 0; i < seats.length; i++) {
+                for (var j = 0; j < seats[i].length; j++) {
+                    if (bookedSeats.includes(seats[i][j])) {
+                        str += "<div class='seat booked'>" + seats[i][j] + "</div>";
+                    }
+					else if (myBookedSeats.includes(seats[i][j])) {
+                        str += "<div class='seat myBooked'>" + seats[i][j] + "</div>";
+                    }
+					else {
+                        str += "<div class='seat' onclick='selectSeat(this)'>" + seats[i][j] + "</div>";
+                    }
+                }
+                //str += "<br>";
+            }
+            document.getElementById("seats").innerHTML = str;
+        }
+
+		function selectSeat(seat) {
+			if (seat.classList.contains("selected")) {
+				selectedSeats.splice(selectedSeats.indexOf(seat.innerHTML),1);
+				console.log(selectedSeats);
+				console.log(seat.innerHTML);
+				console.log(seat.classList);
+				console.log(seat.classList.remove("selected"));
+				console.log(seat.classList);
+				console.log(selectedSeats);
+				return seat.classList.remove("selected");
+				
+			}
+			
+			selectedSeats.push(seat.innerHTML);
+			
+			return seat.classList.add("selected");
+        }
+			
+	init();
+    </script>
+
+
+</body>
+</html>

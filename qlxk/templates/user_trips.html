@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block body %}
+{% load mathfilters %}
+        <div class="trip_table">
+        <table>
+            <tr>
+                <th>
+                    <label>Xuất phát </label>
+                </th>
+                <th>
+                    <label>Điểm đến </label>
+                </th>
+                <th>
+                    <label>Ngày </label>
+                </th>
+                <th>
+                    Giờ
+                </th>
+                <th>
+                    Giá vé
+                </th>
+                <th>
+                    Số vé
+                </th>
+                <th>Chi tiết</th>
+            </tr>
+            {% if  not chuyenxe_list%}
+            <tr><td colspan="7">Không có vé đặt</td></tr>
+            {%else%}
+            {% for chuyenxe in chuyenxe_list%}
+            <tr>
+            <td>
+                {{chuyenxe.origin}}
+            </td>
+            <td>
+                {{chuyenxe.destination}}
+            </td>
+            <td>
+                {{chuyenxe.chuyenxe_date|date:"d/m/Y"}}
+            </td>
+            <td>
+                {{chuyenxe.start_time|date:"G:i"}}-{{chuyenxe.arrive_time|date:"G:i"}}
+            </td>
+            <td>
+                {{chuyenxe.price}}đ
+            </td>
+            <td>
+                {{chuyenxe.ticket_count}} Vé
+            </td>
+            <td>
+                <a href="{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}">Chi tiết</a>
+            </td>
+            </tr>
+            {% endfor%}
+           
+            {%endif%}
+        </table>
+    </div>
+{%endblock%}

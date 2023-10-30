@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Quản lý xe khách
+        </title>
+        <link rel="stylesheet" type="text/css" href=" {% static 'css/style.css' %} ">
+    </head>
+    <body>
+        <div class="top-bar">
+            <div>
+                <a href="{% url 'qlxk:index' %}"><i class="<icon>"></i> Main Page</a>
+            </div>
+            {% if user.is_authenticated %}
+            <div>
+                <a href="{% url 'qlxk:user_trips' %}">User Info</a>
+                <a href="{% url 'qlxk:logout' %}">Logout</a>
+            </div>
+            {% else %}
+                <div>
+                    <a href="{% url 'qlxk:login' %}">Sign In</a>
+                    <a href="{% url 'qlxk:signUp' %}">Sign Up</a>  
+                </div>
+            {% endif %}
+        </div>
+        {% block body%}
+        {% endblock %}
+    </body>
+</html>

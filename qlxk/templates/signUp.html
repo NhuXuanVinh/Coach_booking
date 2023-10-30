@@ -1,0 +1,21 @@
+{% extends "layout.html"%}
+{% block body%}
+    <h4><a href="{%url 'qlxk:login'%}">Login</a></h4>   
+    <form action = "{% url 'qlxk:signUp' %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit">
+    </form>
+    {% if username_taken%}
+    <h3>Username taken</h3>
+    {% endif %}
+    {% if email_taken%}
+    <h3>Email taken</h3>
+    {% endif %}
+    {% if sdt_taken%}
+    <h3>Sdt taken</h3>
+    {% endif %}
+    {% if not username_taken and not email_taken and not sdt_taken and has_summit%}
+    <h3>Success</h3>
+    {%endif%}
+{% endblock%}

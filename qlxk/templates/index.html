@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block body %}
+{% load mathfilters %}
+<div class="trip_page">
+<div class="search-box">
+    <h1>Đặt vé xe</h1>
+    <form action="{% url 'qlxk:index'%}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="origin" placeholder="Nơi đi" required>
+        <input type="text" name="destination" placeholder="Nơi đến" required>
+        <input type="date" name="date">
+        <input type="submit" value="Tìm kiếm">
+    </form>
+</div>
+<div class="trip_table">
+    <table>
+        <tr>
+            <th>
+                Xuất phát
+            </th>
+            <th>
+                Điểm đến
+            </th>
+            <th>
+                Ngày
+            </th>
+            <th>
+                Giờ
+            </th>
+            <th>
+                Loại xe
+            </th>
+            <th>
+                Giá vé
+            </th>
+            <th>
+                Chỗ ngồi
+            </th>
+            <th>Chi tiết</th>
+        </tr>
+        </form>
+        {% if not xes%}
+        <tr>
+            <td colspan="8">Không có chuyến xe phù hợp</td>
+        </tr>
+        {%else%}
+        {% for xe in xes%}
+        <tr>
+            <td>
+                {{xe.origin}}
+            </td>
+            <td>
+                {{xe.destination}}
+            </td>
+            <td>
+                {{xe.chuyenxe_date|date:"d/m/Y"}}
+            </td>
+            <td>
+                {{xe.start_time|date:"G:i"}}-{{xe.arrive_time|date:"G:i"}}
+            </td>
+            <td>
+                {{xe.bien_so.xe_name}}
+            </td>
+            <td>
+                {{xe.price}}đ
+            </td>
+            <td>
+                {{xe.bien_so.row_number|mul:xe.bien_so.column_number}}
+            </td>
+            <td>
+                <a href="{% url 'qlxk:booking_seats' xe.chuyenxe_id %}">Đặt vé</a>
+            </td>
+        </tr>
+        {% endfor%}
+
+        {%endif%}
+    </table>
+</div>
+</div>
+{% endblock %}
