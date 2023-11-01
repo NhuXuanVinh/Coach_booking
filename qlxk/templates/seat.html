@@ -33,6 +33,7 @@
             font-weight: bold;
         }
 		.seat {
+            box-shadow: 0px 0px 10px #bbb;
 			background-color: #eee;
 			margin-top: 5px;
             margin-right:10px;
@@ -93,23 +94,25 @@
             </div>
             {% endif %}
         </div>
-        
+    <div></div>
     <div class="book_container">
     <div class="details">
-        <h1>Chi tiết chuyến đi</h1>
-        <h3>Mã chuyến xe: {{chuyenxe.chuyenxe_id}}</h3>
-        <h3>Loại xe: {{chuyenxe.bien_so.xe_name}}</h3>
-        <h3>Từ: {{chuyenxe.origin}}</h3>
-        <h3>Đến: {{chuyenxe.destination}}</h3>
-        <h3>Ngày: {{chuyenxe.chuyenxe_date|date:"d/m/Y"}}</h3>
-        <h3>Thời gian đi: {{chuyenxe.start_time|date:"G:i"}}-{{chuyenxe.arrive_time|date:"G:i"}}</h3>
+        <h1>Trip Details</h1>
+        <h3>Trip ID: {{chuyenxe.chuyenxe_id}}</h3>
+        <h3>Coach type: {{chuyenxe.bien_so.xe_name}}</h3>
+        <h3>From: {{chuyenxe.origin}}</h3>
+        <h3>To: {{chuyenxe.destination}}</h3>
+        <h3>Date: {{chuyenxe.chuyenxe_date|date:"d/m/Y"}}</h3>
+        <h3>Travel time: {{chuyenxe.start_time|date:"G:i"}}-{{chuyenxe.arrive_time|date:"G:i"}}</h3>
     </div>
 	<div class="seats_container">
         <h2>Please select your seats</h2>
+        
         <div id="seats">
             <!-- Seats go here -->
         </div>
         <button class="book_button" onclick="getSelectedSeats()">Book!</button>
+        
     </div>
     </div>
 	

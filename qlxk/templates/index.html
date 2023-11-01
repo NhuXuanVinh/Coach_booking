@@ -1,13 +1,66 @@
 {% extends "layout.html" %}
 {% block body %}
 {% load mathfilters %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+<!-- Autocomplete -->
+<script>
+$( function() {
+    var Cities = [
+    "Hanoi",
+    "Ho Chi Minh City",
+    "Hai Phong",
+    "Can Tho",
+    "Da Nang",
+    "Hue",
+    "Nha Trang",
+    "Hoi An",
+    "Bien Hoa",
+    "Vung Tau",
+    "Bac Ninh",
+    "Bac Giang",
+    "Bac Kan",
+    "Ben Tre",
+    "Buon Ma Thuot",
+    "Ca Mau",
+    "Cam Pha",
+    "Cao Bang",
+    "Cao Lanh",
+    "Chau Doc",
+    "Chi Linh",
+    "Di An",
+    "Da Lat",
+    "Dien Bien Phu",
+    "Dong Ha",
+    "Dong Hoi",
+    "Dong Xoai",
+    "Gia Nghia",
+    "Ha Giang",
+    "Ha Tien",
+    "Ha Tinh",
+    "Ha Long",
+    "Hai Duong",
+    "Hoa Binh",
+    "Hung Yen"
+];
+
+    $( "#origin" ).autocomplete({
+      source: Cities
+    });
+    $( "#destination" ).autocomplete({
+        source: Cities
+    });
+} );
+</script>
 <div class="trip_page">
 <div class="search-box">
-    <h1>Đặt vé xe</h1>
+    <h1>Find Your Trip!</h1>
     <form action="{% url 'qlxk:index'%}" method="POST">
         {% csrf_token %}
-        <input type="text" name="origin" placeholder="Nơi đi" required>
-        <input type="text" name="destination" placeholder="Nơi đến" required>
+        <input type="text" id="origin" name="origin" placeholder="Nơi đi" required>
+        <input type="text" id="destination" name="destination" placeholder="Nơi đến" required>
         <input type="date" name="date">
         <input type="submit" value="Tìm kiếm">
     </form>

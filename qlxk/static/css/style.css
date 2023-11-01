@@ -7,6 +7,8 @@
 body {
     animation: changeBG 30s infinite;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 @keyframes changeBG {
@@ -21,9 +23,7 @@ body {
     display: flex;
     justify-content: center;
     align-items:  center;
-    height: 100vh;
-    /* background-image: linear-gradient(to right bottom,#4bc0eb,#e81f87); */
-    
+    height: 100vh;    
 }
 
 
@@ -102,6 +102,7 @@ body {
 }
 
 .trip_table table {
+    box-shadow: 0px 0px 10px #bbb;
     margin-left: auto;
     margin-right: auto;
     width: 80%;
@@ -203,4 +204,5 @@ body {
     border: none;
     cursor: pointer;
 }
+
 

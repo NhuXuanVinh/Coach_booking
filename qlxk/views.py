@@ -13,10 +13,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 class signUpForm(forms.Form):
-    username = forms.CharField(max_length=64, label="Username")
-    password = forms.CharField(max_length=64,widget=forms.PasswordInput, label="Password")
-    email =  forms.CharField(max_length=64, label="Email")
-    sdt =  forms.CharField(max_length=64,label="Số điện thoại")
+    username = forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    password = forms.CharField(max_length=64,widget=forms.PasswordInput(attrs={'placeholder': 'Password'}), label="Password")
+    email =  forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Your Email'}))
+    sdt =  forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Phone number'}))
 
 class datveForm(forms.Form):
     ghe_row = forms.IntegerField(min_value=1, label="Hàng")
@@ -52,6 +52,8 @@ def index(request):
             destination_find =  Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe where destination like %s ORDER BY chuyenxe_date DESC, start_time DESC", [like_destination])      
         chuyenxes = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC")
         xes=[]
+        if date:
+            Chuyenxe.objects.filter(origin)
         for chuyenxe in chuyenxes:
             if chuyenxe in origin_find and chuyenxe in date_find and chuyenxe in destination_find:
                 xes.append(chuyenxe)
