@@ -12,56 +12,37 @@ from django.core import serializers
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+# Form for signing up
 class signUpForm(forms.Form):
-    username = forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    password = forms.CharField(max_length=64,widget=forms.PasswordInput(attrs={'placeholder': 'Password'}), label="Password")
+    username = forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Username', "autocomplete": "off",'readonly': 'readonly',
+    'onfocus': "this.removeAttribute('readonly');",
+}))
+    password = forms.CharField(max_length=64,widget=forms.PasswordInput(attrs={'placeholder': 'Password', "autocomplete": "off", 'readonly': 'readonly',
+    'onfocus': "this.removeAttribute('readonly');",
+}),)
     email =  forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Your Email'}))
     sdt =  forms.CharField(max_length=64, widget=forms.TextInput(attrs={'placeholder': 'Phone number'}))
 
-class datveForm(forms.Form):
-    ghe_row = forms.IntegerField(min_value=1, label="Hàng")
-    ghe_col = forms.IntegerField(min_value=1, label="Cột")
     
-def hello(request):
-    test = {
-        "hello": "hello",
-    }
-    test_out = json.dumps(test)
-    return render(request, "test.html",{
-        "test": test_out,
-    })
-
+# Main page
 def index(request):
+    has_find= False
     if request.method == "POST":
+        has_find = True
         origin = request.POST.get("origin")
         destination = request.POST.get("destination")
         date = request.POST.get("date")
-        like_origin = '%'+ origin + '%'
-        like_destination = '%'+ destination +'%'
-        if not origin:
-            origin_find = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC")
-        else:
-            origin_find = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe WHERE origin like %s ORDER BY chuyenxe_date DESC, start_time DESC", [like_origin])
         if not date:
-            date_find = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC")
+            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination = destination)
         else:
-            date_find = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe WHERE chuyenxe_date = %s ORDER BY chuyenxe_date DESC, start_time DESC", [date])
-        if not destination:
-            destination_find = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC")
-        else:
-            destination_find =  Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe where destination like %s ORDER BY chuyenxe_date DESC, start_time DESC", [like_destination])      
-        chuyenxes = Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC")
-        xes=[]
-        if date:
-            Chuyenxe.objects.filter(origin)
-        for chuyenxe in chuyenxes:
-            if chuyenxe in origin_find and chuyenxe in date_find and chuyenxe in destination_find:
-                xes.append(chuyenxe)
+            Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date)
+        
         return render(request,"index.html",{
-            "xes": xes,
+            "chuyenxe": chuyenxe,
+            "has_find": has_find,
         })
     return render(request,"index.html",{
-            "xes": Chuyenxe.objects.raw("SELECT * FROM qlxk_chuyenxe ORDER BY chuyenxe_date DESC, start_time DESC"),
+            "has_find": has_find,
         })
 
 
@@ -83,10 +64,8 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("qlxk:index"))
     
 def signUp(request):
-    has_summit = False
     if request.method == "POST":
         newUser = signUpForm(request.POST)
-        has_summit = True
         if newUser.is_valid():
             newusername = newUser.cleaned_data["username"]
             newpassword = newUser.cleaned_data["password"]
@@ -95,22 +74,27 @@ def signUp(request):
             username_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE username = %s", [newusername])
             email_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE user_mail = %s", [newemail])
             sdt_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE user_phone = %s", [newsdt])
+            if username_taken:
+                username_error = "Username taken!"
+            if email_taken:
+                email_error = "Email taken!"
+            if sdt_taken:
+                phone_error ="Phone number taken!"
             if  not username_taken and not email_taken and not sdt_taken:
                 user = Users.objects.create_user(username=newusername, password=newpassword, user_mail=newemail, user_phone=newsdt)
                 user.save()
                 return HttpResponseRedirect(reverse("qlxk:login"))
         return render(request, "signUp.html", {
-            "username_taken": username_taken,
-            "email_taken": email_taken,
-            "sdt_taken": sdt_taken,
             "form": signUpForm(),
-            "has_summit": has_summit,
+            "username_error": username_error,
+            "email_error": email_error,
+            "phone_error": phone_error,
         })  
     return render(request, "signUp.html", {
             "form": signUpForm(),
-            "has_summit": has_summit
         })
-    
+
+# Show user's booked trips
 def user_trips(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qlxk:login"))

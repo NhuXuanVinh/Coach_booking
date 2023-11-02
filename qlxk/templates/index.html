@@ -65,6 +65,7 @@ $( function() {
         <input type="submit" value="Tìm kiếm">
     </form>
 </div>
+{% if has_find%}
 <div class="trip_table">
     <table>
         <tr>
@@ -92,12 +93,12 @@ $( function() {
             <th>Chi tiết</th>
         </tr>
         </form>
-        {% if not xes%}
+        {% if not chuyenxe%}
         <tr>
             <td colspan="8">Không có chuyến xe phù hợp</td>
         </tr>
         {%else%}
-        {% for xe in xes%}
+        {% for xe in chuyenxe%}
         <tr>
             <td>
                 {{xe.origin}}
@@ -129,5 +130,6 @@ $( function() {
         {%endif%}
     </table>
 </div>
+{% endif %}
 </div>
 {% endblock %}

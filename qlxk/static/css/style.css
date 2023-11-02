@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 body {
-    animation: changeBG 30s infinite;
+    animation: changeBG 50s infinite;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -95,7 +95,9 @@ body {
 .signUp_link p a:hover{
     text-decoration: underline;
 }
-
+.error_text{
+    color: red;
+}
 .trip_table{
     
     margin-top: 30px;

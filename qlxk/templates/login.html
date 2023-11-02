@@ -14,14 +14,17 @@
                 <form action="{%url 'qlxk:login' %}" method="post">
                     {% csrf_token %}
                     <div class="input_box">
-                    <input type="text" name="username" id="username" placeholder="Username"  autocomplete="off" required>
+                    <input type="text" name="username" id="username" placeholder="Username"  autocomplete="false"  required>
                     </div>
                     <div class="input_box">
-                    <input type="password" name="password" id="password" placeholder="Password"  autocomplete="off" required>
+                        <input type='password' name='password' id='password' placeholder="Password"  autocomplete='false' required />
                     </div>
                     <button type="submit" class="btn">Login</button>
                 </form>
-                <div class="signUp_link">
+                    <div class="error_text">
+                        {{ error }}
+                    </div>
+                    <div class="signUp_link">
                     <p>
                     Dont't have an account? 
                     <a href="{% url 'qlxk:signUp'%}">Sign Up</a>

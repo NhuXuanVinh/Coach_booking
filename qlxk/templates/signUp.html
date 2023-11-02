@@ -1,25 +1,44 @@
-{% extends "layout.html"%}
-{% block body%}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Sign Up!
+        </title>
+        <link rel="stylesheet" type="text/css" href=" {% static 'css/style.css' %} ">
+    </head>
+    <body>
 <div class="login_body">
     <div class="wrapper">
-        <h1>Login</h1>
-        <form action="{%url 'qlxk:login' %}" method="post">
+        <h1>Sign Up</h1>
+        <form action="{%url 'qlxk:signUp' %}" method="post">
             {% csrf_token %}
             <div class="input_box">
             {{form.username}}
+            <div class="error_text">
+                {{ username_error }}
+                </div>
             </div>
             <div class="input_box">
-            {{form.password}}
+                {{form.password}}
             </div>
             <div class="input_box">
                 {{form.email}}
+                <div class="error_text">
+                    {{ email_error }}
+                </div>
             </div>
+            
             <div class="input_box">
                 {{form.sdt}}
+                <div class="error_text">
+                    {{ phone_error }}
+                </div>
             </div>
+            
             <button type="submit" class="btn">Sign Up</button>
         </form>
-        <div class="signUp_link">
+            <div class="signUp_link">
             <p>
             Already have an account?
             <a href="{% url 'qlxk:login'%}">Sign In</a>
@@ -29,4 +48,5 @@
     </div>
     </div>
     </form>
-{% endblock%}
+</body>
+</html>
