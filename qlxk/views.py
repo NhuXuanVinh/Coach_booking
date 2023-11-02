@@ -35,7 +35,7 @@ def index(request):
         if not date:
             chuyenxe = Chuyenxe.objects.filter(origin=origin, destination = destination)
         else:
-            Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date)
+            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date)
         
         return render(request,"index.html",{
             "chuyenxe": chuyenxe,

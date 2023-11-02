@@ -6,22 +6,22 @@
         <table>
             <tr>
                 <th>
-                    <label>Xuất phát </label>
+                    <label>From </label>
                 </th>
                 <th>
-                    <label>Điểm đến </label>
+                    <label>To </label>
                 </th>
                 <th>
-                    <label>Ngày </label>
+                    <label>Date </label>
                 </th>
                 <th>
-                    Giờ
+                    Travel time
                 </th>
                 <th>
-                    Giá vé
+                    Price
                 </th>
                 <th>
-                    Số vé
+                    Tickets booked
                 </th>
                 <th>Chi tiết</th>
             </tr>
@@ -46,7 +46,7 @@
                 {{chuyenxe.price}}đ
             </td>
             <td>
-                {{chuyenxe.ticket_count}} Vé
+                {{chuyenxe.ticket_count}} Tickets
             </td>
             <td>
                 <a href="{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}">Chi tiết</a>
