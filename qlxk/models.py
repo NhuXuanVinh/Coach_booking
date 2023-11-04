@@ -21,6 +21,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(username, password, **extra_fields)
 
+# User
 class Users(AbstractBaseUser, PermissionsMixin):
     user_id = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=255, unique=True)
@@ -37,6 +38,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+# Coach's staffs
 class Nhanvienxe(models.Model):
     nhanvien_id = models.BigAutoField(primary_key=True)
     nhanvien_name = models.CharField(max_length=255)
@@ -44,6 +46,7 @@ class Nhanvienxe(models.Model):
     phone = models.CharField(max_length=255)
     age = models.IntegerField()
 
+# Coaches
 class Xe(models.Model):
     bien_so = models.CharField(max_length=255, primary_key=True)
     last_maintain = models.DateField()
@@ -52,6 +55,7 @@ class Xe(models.Model):
     column_number = models.IntegerField()
     xe_name = models.CharField(max_length=255)
 
+# Trips
 class Chuyenxe(models.Model):
     chuyenxe_id = models.BigAutoField(primary_key=True)
     bien_so = models.ForeignKey(Xe, on_delete=models.CASCADE, db_column='bien_so')
@@ -61,28 +65,33 @@ class Chuyenxe(models.Model):
     origin = models.CharField(max_length=255)
     destination = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=0)
-    
+
+# Seats
 class Ghe(models.Model):
     ghe_id = models.BigAutoField(primary_key=True)
     bien_so = models.ForeignKey(Xe, on_delete=models.CASCADE, db_column='bien_so')
     row = models.IntegerField()
     col = models.IntegerField()
 
+# Tickets
 class Ve(models.Model):
     ve_id = models.BigAutoField(primary_key=True)
     ghe_id = models.ForeignKey(Ghe, on_delete=models.CASCADE, db_column='ghe_id')
     chuyenxe_id = models.ForeignKey(Chuyenxe, on_delete=models.CASCADE, db_column='chuyenxe_id')
     status = models.BooleanField(default=False)
 
+# Linked between trips and staff
 class Dieukhien(models.Model):
     chuyenxe_id = models.ForeignKey(Chuyenxe, on_delete=models.CASCADE, db_column='chuyenxe_id')
     nhanvien_id = models.ForeignKey(Nhanvienxe, on_delete=models.CASCADE, db_column='nhanvien_id')
 
+# Booking
 class Datve(models.Model):
     ve_id = models.ForeignKey(Ve, on_delete=models.CASCADE, db_column='ve_id')
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
     ve_time = models.DateTimeField(auto_now_add=True)
 
+# Comment and rating
 class Danhgia(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='user_id')
     chuyenxe_id = models.ForeignKey(Chuyenxe, on_delete=models.CASCADE, db_column='chuyenxe_id')

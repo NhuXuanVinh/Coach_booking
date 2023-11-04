@@ -44,34 +44,37 @@
 			line-height: 30px;
 			border-radius: 5px;
 		}
-		.seat.selected {
+        /* Selected seats */
+        .seat.selected {
 			background-color: #16df16;
 		}
+        /* Seats booked by other users */
 		.seat.booked {
 			background-color: #ff0000;
 			pointer-events: none;
 		}
+        /* Seats booked current user */
 		.seat.myBooked {
             background-color: #529ff8;
             pointer-events: none;
         }
         .book_button {
-            background-color: #4CAF50; /* Green background */
+            background-color: #4CAF50;
             height: 60px;
-            border: none; /* Remove border */
-            color: white; /* White text */
-            padding: 15px 20px; /* Some padding */
-            text-align: center; /* Centered text */
-            text-decoration: none; /* Remove underline */
+            border: none; 
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none; 
             display: inline-block;
             font-size: 16px;
             margin: 30px 2px;
             cursor: pointer;
-            transition-duration: 0.4s; /* Transition effect */
+            transition-duration: 0.4s;
         }
     
         button:hover {
-            background-color: #45a049; /* Green background on hover */
+            background-color: #45a049;
         }
 	</style>
 </head>
@@ -142,7 +145,7 @@
                 alert("Please select at least one seat.");
                 return;  // Stop here if no seats are selected
             }
-            var url = "{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}"; // replace with your endpoint
+            var url = "{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}";
             var data = {selectedSeats: selectedSeats};
         
             fetch(url, {
@@ -181,7 +184,6 @@
                         str += "<div class='seat' onclick='selectSeat(this)'>" + seats[i][j] + "</div>";
                     }
                 }
-                //str += "<br>";
             }
             document.getElementById("seats").innerHTML = str;
         }

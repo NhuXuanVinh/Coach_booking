@@ -21,12 +21,16 @@
                     Price
                 </th>
                 <th>
+                    Total
+                </th>
+                <th>
                     Tickets booked
                 </th>
-                <th>Chi tiết</th>
+                <th>Details</th>
             </tr>
+            <!-- If user's have no booked trips -->
             {% if  not chuyenxe_list%}
-            <tr><td colspan="7">You have no trip</td></tr>
+            <tr><td colspan="8">You have no trip</td></tr>
             {%else%}
             {% for chuyenxe in chuyenxe_list%}
             <tr>
@@ -46,10 +50,13 @@
                 {{chuyenxe.price}}đ
             </td>
             <td>
+                {% widthratio chuyenxe.price 1 chuyenxe.ticket_count%}đ   <!-- total = price.ticket_count -->
+            </td>
+            <td>
                 {{chuyenxe.ticket_count}} Tickets
             </td>
             <td>
-                <a href="{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}">Chi tiết</a>
+                <a href="{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}">Details</a>
             </td>
             </tr>
             {% endfor%}

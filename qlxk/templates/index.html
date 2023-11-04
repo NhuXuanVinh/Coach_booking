@@ -70,27 +70,27 @@ $( function() {
     <table>
         <tr>
             <th>
-                Xuất phát
+                From
             </th>
             <th>
-                Điểm đến
+                To
             </th>
             <th>
-                Ngày
+                Date
             </th>
             <th>
-                Giờ
+                Travel time
             </th>
             <th>
-                Loại xe
+                Coach Type
             </th>
             <th>
-                Giá vé
+                Price
             </th>
             <th>
-                Chỗ ngồi
+                Seat
             </th>
-            <th>Chi tiết</th>
+            <th>Booking</th>
         </tr>
         </form>
         {% if not chuyenxe%}
@@ -122,7 +122,7 @@ $( function() {
                 {{xe.bien_so.row_number|mul:xe.bien_so.column_number}}
             </td>
             <td>
-                <a href="{% url 'qlxk:booking_seats' xe.chuyenxe_id %}">Đặt vé</a>
+                <a href="{% url 'qlxk:booking_seats' xe.chuyenxe_id %}">Book ticket</a>
             </td>
         </tr>
         {% endfor%}

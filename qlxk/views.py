@@ -28,15 +28,16 @@ class signUpForm(forms.Form):
 def index(request):
     has_find= False
     if request.method == "POST":
+        # Get origin, destination and date
         has_find = True
         origin = request.POST.get("origin")
         destination = request.POST.get("destination")
         date = request.POST.get("date")
+        # Find trips based on origin, destination and/or date
         if not date:
             chuyenxe = Chuyenxe.objects.filter(origin=origin, destination = destination)
         else:
             chuyenxe = Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date)
-        
         return render(request,"index.html",{
             "chuyenxe": chuyenxe,
             "has_find": has_find,
@@ -45,9 +46,10 @@ def index(request):
             "has_find": has_find,
         })
 
-
+# Login
 def login_view(request):
     if request.method == 'POST':
+        # Get username and password
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
@@ -56,9 +58,9 @@ def login_view(request):
             return redirect('qlxk:index')
         else:
             return render(request, 'login.html', {'error': 'Invalid username or password'})
-    
     return render(request, 'login.html')
 
+# Logout
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("qlxk:index"))
@@ -67,19 +69,23 @@ def signUp(request):
     if request.method == "POST":
         newUser = signUpForm(request.POST)
         if newUser.is_valid():
+            # Get user's info
             newusername = newUser.cleaned_data["username"]
             newpassword = newUser.cleaned_data["password"]
             newemail = newUser.cleaned_data["email"]
             newsdt = newUser.cleaned_data["sdt"]
+            # Check if user's info are taken
             username_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE username = %s", [newusername])
             email_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE user_mail = %s", [newemail])
             sdt_taken = Users.objects.raw("SELECT * FROM qlxk_users WHERE user_phone = %s", [newsdt])
+            # Error messages
             if username_taken:
                 username_error = "Username taken!"
             if email_taken:
                 email_error = "Email taken!"
             if sdt_taken:
                 phone_error ="Phone number taken!"
+            # If no infos taken, save user
             if  not username_taken and not email_taken and not sdt_taken:
                 user = Users.objects.create_user(username=newusername, password=newpassword, user_mail=newemail, user_phone=newsdt)
                 user.save()
@@ -96,8 +102,10 @@ def signUp(request):
 
 # Show user's booked trips
 def user_trips(request):
+    # If user's not loged in, redirect to the login page
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("qlxk:login"))
+    # Get user and their trips
     user = request.user
     chuyenxe_list = Chuyenxe.objects.filter(ve__datve__user_id=user).annotate(ticket_count=Count('ve'))
     return render(request, "user_trips.html",{
@@ -141,17 +149,21 @@ def booking_seats(request, chuyenxe_id):
         
 
     if request.method == 'POST':
+        # Get seats data
         data = json.loads(request.body)
         selected_seats = data.get('selectedSeats', [])
         response_data = {}
         
         # Check if any seat is booked by other user
         for seat in selected_seats:
+            # Get seats in row and column
             seat = int(seat)
             seat_row = (seat-1)//numCols+1
             seat_col = (seat-1)%numCols+1
+            # Get seats and tickets accordingly
             seat_saved = Ghe.objects.get(bien_so=xe.bien_so,row=seat_row, col=seat_col)
             ve = Ve.objects.get(ghe_id=seat_saved.ghe_id, chuyenxe_id = chuyenxe_id)
+            # If ve is booked by other users, return error
             if ve.status == True:
                 has_booked = True
                 messages.error(request, 'The selected seat is already booked.')
@@ -181,5 +193,3 @@ def booking_seats(request, chuyenxe_id):
         "numRows": numRows,
     })
 
-    
-# Create your views here.
