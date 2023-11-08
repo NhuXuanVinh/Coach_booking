@@ -54,15 +54,17 @@ $( function() {
     });
 } );
 </script>
+
+
 <div class="trip_page">
 <div class="search-box">
     <h1>Find Your Trip!</h1>
     <form action="{% url 'qlxk:index'%}" method="POST">
         {% csrf_token %}
-        <input type="text" id="origin" name="origin" placeholder="Nơi đi" required>
-        <input type="text" id="destination" name="destination" placeholder="Nơi đến" required>
+        <input type="text" id="origin" name="origin" placeholder="Origin" required>
+        <input type="text" id="destination" name="destination" placeholder="Destination" required>
         <input type="date" name="date">
-        <input type="submit" value="Tìm kiếm">
+        <input type="submit" value="Search">
     </form>
 </div>
 {% if has_find%}
@@ -95,7 +97,7 @@ $( function() {
         </form>
         {% if not chuyenxe%}
         <tr>
-            <td colspan="8">Không có chuyến xe phù hợp</td>
+            <td colspan="8">No trips found</td>
         </tr>
         {%else%}
         {% for xe in chuyenxe%}
