@@ -8,42 +8,94 @@
 <!-- Autocomplete -->
 <script>
 $( function() {
-    var Cities = [
-    "Hanoi",
-    "Ho Chi Minh City",
-    "Hai Phong",
-    "Can Tho",
-    "Da Nang",
-    "Hue",
-    "Nha Trang",
-    "Hoi An",
-    "Bien Hoa",
-    "Vung Tau",
-    "Bac Ninh",
-    "Bac Giang",
-    "Bac Kan",
-    "Ben Tre",
-    "Buon Ma Thuot",
-    "Ca Mau",
-    "Cam Pha",
-    "Cao Bang",
-    "Cao Lanh",
-    "Chau Doc",
-    "Chi Linh",
-    "Di An",
-    "Da Lat",
-    "Dien Bien Phu",
-    "Dong Ha",
-    "Dong Hoi",
-    "Dong Xoai",
-    "Gia Nghia",
-    "Ha Giang",
-    "Ha Tien",
-    "Ha Tinh",
-    "Ha Long",
-    "Hai Duong",
-    "Hoa Binh",
-    "Hung Yen"
+    const Cities = [
+  "An Giang",
+  "Ba Riaư",
+  "Vung Tau",
+  "Bac Lieu",
+  "Bac Kan",
+  "Bac Giang",
+  "Bac Ninh",
+  "Ben Tre",
+  "Binh Duong",
+  "Binh Dinh",
+  "Binh Phuoc",
+  "Binh Thuan",
+  "Ca Mau",
+  "Cao Bang",
+  "Can Tho",
+  "Da Nang",
+  "Dak Lak",
+  "Dak Nong",
+  "Dien Bien",
+  "Dong Nai",
+  "Dong Thap",
+  "Gia Lai",
+  "Ha Giang",
+  "Ha Nam",
+  "Ha Noi",
+  "Ha Tinh",
+  "Hai Duong",
+  "Hai Phong",
+  "Hau Giang",
+  "Hoa Binh",
+  "Hung Yen",
+  "Khanh Hoa",
+  "Kien Giang",
+  "Kon Tum",
+  "Lai Chau",
+  "Lam Dong",
+  "Lang Son",
+  "Lao Cai",
+  "Long An",
+  "Nam Dinh",
+  "Nghe An",
+  "Ninh Binh",
+  "Ninh Thuan",
+  "Phu Tho",
+  "Phu Yen",
+  "Quang Binh",
+  "Quang Nam",
+  "Quang Ngai",
+  "Quang Ninh",
+  "Quang Tri",
+  "Soc Trang",
+  "Son La",
+  "Tay Ninh",
+  "Thai Binh",
+  "Thai Nguyen",
+  "Thanh Hoa",
+  "Hue",
+  "Tien Giang",
+  "Tra Vinh",
+  "Tuyen Quang",
+  "Vinh Long",
+  "Vinh Phuc",
+  "Yen Bai",
+  "Bac Lieu",
+  "Bao Loc",
+  "Cam Pha",
+  "Cam Ranh",
+  "Ho Chi Minh City",
+  "Chau Doc",
+  "Chi Linh",
+  "Di An",
+  "Ha Tien",
+  "Hoi An",
+  "Long Khanh",
+  "Mong Cai",
+  "Nga Bay",
+  "Phu Quoc",
+  "Phuc Yen",
+  "Sa Dec",
+  "Sam Son",
+  "Song Cong",
+  "Tam Diep",
+  "Tuan Yen",
+  "Thuan An",
+  "Uong Bi",
+
+
 ];
 
     $( "#origin" ).autocomplete({
@@ -96,36 +148,36 @@ $( function() {
             <th>Booking</th>
         </tr>
         </form>
-        {% if not chuyenxe%}
+        {% if not chuyenxes%}
         <tr>
             <td colspan="8">No trips found</td>
         </tr>
         {%else%}
-        {% for xe in chuyenxe%}
+        {% for chuyenxe in chuyenxes%}
         <tr>
             <td>
-                {{xe.origin}}
+                {{chuyenxe.origin}}
             </td>
             <td>
-                {{xe.destination}}
+                {{chuyenxe.destination}}
             </td>
             <td>
-                {{xe.chuyenxe_date|date:"d/m/Y"}}
+                {{chuyenxe.chuyenxe_date|date:"d/m/Y"}}
             </td>
             <td>
-                {{xe.start_time|date:"G:i"}}-{{xe.arrive_time|date:"G:i"}}
+                {{chuyenxe.start_time|date:"G:i"}}-{{chuyenxe.arrive_time|date:"G:i"}}
             </td>
             <td>
-                {{xe.bien_so.xe_name}}
+                {{chuyenxe.bien_so.xe_name}}
             </td>
             <td>
-                {{xe.price}}đ
+                {{chuyenxe.price}}đ
             </td>
             <td>
-                {{xe.bien_so.row_number|mul:xe.bien_so.column_number}}
+                {{chuyenxe.bien_so.row_number|mul:chuyenxe.bien_so.column_number}}
             </td>
             <td>
-                <a href="{% url 'qlxk:booking_seats' xe.chuyenxe_id %}">Book ticket</a>
+                <a href="{% url 'qlxk:booking_seats' chuyenxe.chuyenxe_id %}">Book ticket</a>
             </td>
         </tr>
         {% endfor%}

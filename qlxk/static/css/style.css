@@ -1,9 +1,9 @@
-
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     animation: changeBG 50s infinite;
     background-size: cover;
@@ -12,12 +12,12 @@ body {
 }
 
 @keyframes changeBG {
-    0% {background-image: url(background1.jpg);}
-    20% {background-image: url(background2.jpg);}
-    40% {background-image: url(background3.jpg);}
-    60% {background-image: url(background4.jpg);}
-    80% {background-image: url(background5.jpg);}
-    100% {background-image: url(background1.jpg);}
+    0% {background-image: url(../images/background1.jpg);}
+    20% {background-image: url(../images/background2.jpg);}
+    40% {background-image: url(../images/background3.jpg);}
+    60% {background-image: url(../images/background4.jpg);}
+    80% {background-image: url(../images/background5.jpg);}
+    100% {background-image: url(../images/background1.jpg);}
 }
 .login_body{
     display: flex;
@@ -140,7 +140,7 @@ body {
     justify-content: space-between;
     padding: 20px;
     background-color: 	rgba(15, 15, 15, 0.7);
-
+    box-shadow: 0 0 10px #bbb;
     color: white;
 }
 .top-bar a {

@@ -153,12 +153,13 @@
 
     <!-- Get seats -->
     <script type="text/javascript">
-        var seats = []
+
         var numCols = "{{ numCols }}";
         var numRows = "{{ numRows }}";
         var bookedSeats = JSON.parse('{{ bookedSeats|escapejs }}');
 		var myBookedSeats = JSON.parse('{{ myBookedSeats|escapejs }}');
         var price = "{{chuyenxe.price}}"
+        var seats = []
         window.onload = function() {
             var seats = document.getElementById("seats");
             seats.style.gridTemplateColumns = "repeat(" + numCols + ", 1fr)"
@@ -262,9 +263,6 @@
             updateTotalPrice();
         });
     });
-    
-    
-
     
     </script>
 </body>

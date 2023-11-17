@@ -35,11 +35,11 @@ def index(request):
         date = request.POST.get("date")
         # Find trips based on origin, destination and/or date
         if not date:
-            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination = destination)
+            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination = destination).order_by('chuyenxe_date', 'start_time')
         else:
-            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date)
+            chuyenxe = Chuyenxe.objects.filter(origin=origin, destination=destination, chuyenxe_date = date).order_by('chuyenxe_date', 'start_time')
         return render(request,"index.html",{
-            "chuyenxe": chuyenxe,
+            "chuyenxes": chuyenxe,
             "has_find": has_find,
         })
     return render(request,"index.html",{
@@ -66,6 +66,7 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("qlxk:index"))
     
 def signUp(request):
+
     if request.method == "POST":
         newUser = signUpForm(request.POST)
         if newUser.is_valid():
@@ -90,12 +91,12 @@ def signUp(request):
                 user = Users.objects.create_user(username=newusername, password=newpassword, user_mail=newemail, user_phone=newsdt)
                 user.save()
                 return HttpResponseRedirect(reverse("qlxk:login"))
-        return render(request, "signUp.html", {
-            "form": signUpForm(),
-            "username_error": username_error,
-            "email_error": email_error,
-            "phone_error": phone_error,
-        })  
+            return render(request, "signUp.html", {
+                "form": signUpForm(),
+                "username_error": username_error,
+                "email_error": email_error,
+                "phone_error": phone_error,
+            })  
     return render(request, "signUp.html", {
             "form": signUpForm(),
         })
@@ -130,9 +131,11 @@ def booking_seats(request, chuyenxe_id):
     numCols = xe.column_number
     numRows = xe.row_number
     
-    # User's already booked seats and other's booked seats
+    # User's already booked seats
     blueSeats = []
+    # Other user's booked seats
     redSeats = []
+    
     # Get all Ghe instances associated with the booked Ve instances
     myBooked_tickets = Ve.objects.filter(Q(datve__user_id=user_id) & Q(chuyenxe_id=chuyenxe_id))
     myBooked_seats = Ghe.objects.filter(ve__in=myBooked_tickets)
@@ -193,3 +196,4 @@ def booking_seats(request, chuyenxe_id):
         "numRows": numRows,
     })
 
+    
